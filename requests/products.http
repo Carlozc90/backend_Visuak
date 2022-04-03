@@ -1,13 +1,33 @@
 @api = http://localhost:3000/products
 
+### obtener todo
 GET {{api}}
 
-###
+### enviando dato
 POST {{api}}
 Content-Type: application/json
 
 {
-    "nombre":"adriana2",
-    "peticion":"post2",
-    "fecha":"10-012"
+    "nombre":"adriana3",
+    "peticion":"post3",
+    "fecha":"10-013"
+}
+
+### obtener por su id
+GET {{api}}/3
+
+### eliminando por su id
+DELETE {{api}}/7
+
+### obtener count de la tabla
+GET {{api}}/count
+
+### editar por su id
+PUT {{api}}/3
+Content-Type: application/json
+
+{
+    "nombre": "andres(acualizado)",
+    "peticion": "get",
+    "fecha": "10-103"
 }

@@ -3,6 +3,10 @@ import { Router } from "express";
 import {
   getProducts,
   createNewProduct,
+  getLogById,
+  deleteLogById,
+  getLogCountController,
+  editarLogById,
 } from "../controllers/products.controller";
 
 const router = Router();
@@ -13,10 +17,12 @@ router.get("/products", getProducts);
 
 router.post("/products", createNewProduct);
 
-router.get("/products");
+router.get("/products/count", getLogCountController);
 
-router.delete("/products");
+router.get("/products/:id", getLogById);
 
-router.put("/products");
+router.delete("/products/:id", deleteLogById);
+
+router.put("/products/:id", editarLogById);
 
 export default router;
