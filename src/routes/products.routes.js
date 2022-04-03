@@ -1,6 +1,9 @@
 import { Router } from "express";
 
-import { getProducts } from "../controllers/products.controller";
+import {
+  getProducts,
+  createNewProduct,
+} from "../controllers/products.controller";
 
 const router = Router();
 
@@ -8,7 +11,7 @@ const router = Router();
 
 router.get("/products", getProducts);
 
-router.post("/products");
+router.post("/products", createNewProduct);
 
 router.get("/products");
 
