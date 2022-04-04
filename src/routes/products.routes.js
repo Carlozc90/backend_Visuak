@@ -7,6 +7,7 @@ import {
   deleteLogById,
   getLogCountController,
   editarLogById,
+  postLogin,
 } from "../controllers/products.controller";
 
 const router = Router();
@@ -24,5 +25,11 @@ router.get("/products/:id", getLogById);
 router.delete("/products/:id", deleteLogById);
 
 router.put("/products/:id", editarLogById);
+
+///////////////////////////////////////////////////////
+
+// router.post("/visualk", (req, res) => res.send("visual!!!"));
+
+router.post("/visualk", postLogin);
 
 export default router;
