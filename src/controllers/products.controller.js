@@ -1,4 +1,9 @@
+import axios from "axios";
 import { getConnection, sql, queries } from "../database";
+
+let sessionCookies = "";
+let arrheader = [];
+const db = "VISUALK_CL";
 
 export const getProducts = async (req, res) => {
   try {
@@ -82,7 +87,7 @@ export const editarLogById = async (req, res) => {
   res.json({ nombre, peticion, fecha });
 };
 
-export const postLogin = async (req, res) => {
+export const postLoginLayer = async (req, res) => {
   const request = require("request");
   const url = "https://datacenter.visualkgroup.com:58346/b1s/v1/Login";
   const body = {
@@ -108,7 +113,92 @@ export const postLogin = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
       console.log("3", JSON.stringify(response.body));
+      // console.log("4", response.rawHeaders);
+      res.json(response.body);
+
+      sessionCookies = response.body.SessionId;
+      arrheader = response.rawHeaders[15].split(";");
+      arrheader = arrheader[0].split("=");
+    }
+  });
+};
+
+// export const getSocioById = async (req, res) => {
+//   try {
+//     const data = await axios(
+//       `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('CS001')`,
+//       {
+//         withCredentials: true,
+//       }
+//     )
+//       .catch(function (error) {
+//         // respuesta del servidor error
+//         if (error.response) {
+//           console.log(error.response.data);
+//         }
+//       })
+//       .then((res) => {
+//         console.log(res);
+//       })
+//       .catch((error) => console.error("Error:", error))
+//       .then(function (response) {
+//         console.log(response);
+//       });
+
+//     console.log(data);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+export const getSocioById = async (req, res) => {
+  res.cookie(`B1SESSION`, sessionCookies);
+  res.cookie(`CompanyDB`, db);
+  res.cookie(`ROUTEID`, arrheader[1]);
+
+  const { id } = req.params;
+  const request = require("request");
+  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('CS003')`;
+  const body = {};
+  const postheaders = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    url: url,
+    method: "get",
+    json: body,
+    postheaders: postheaders,
+    strictSSL: false,
+    secureProtocol: "TLSv1_method",
+  };
+  // request.cookie("key1=value1");
+  request.get(options, (error, response, body) => {
+    if (error) {
+      console.log("1", error);
+    } else {
+      // console.log("respuestacookis", req.cookies);
+      console.log("2", response.statusCode);
+      console.log("3", JSON.stringify(response.body));
       res.json(response.body);
     }
   });
+};
+
+export const losBenditosCookis = async (req, res) => {
+  // res.clearCookie();
+  res.cookie(`B1SESSION`, sessionCookies);
+  res.cookie(`CompanyDB`, db);
+  res.cookie(`ROUTEID`, arrheader[1]);
+
+  // res.send("Cookie have been saved successfully");
+
+  console.log("antes", req.cookies);
+  console.log("despues", res.cookies);
+  res.send(req.cookies);
+};
+
+export const resolviendo = async (req, res) => {
+  console.log("nodo-> ", arrheader[1]);
+  console.log("session-> ", sessionCookies);
+  console.log("ladb-> ", db);
 };

@@ -7,7 +7,10 @@ import {
   deleteLogById,
   getLogCountController,
   editarLogById,
-  postLogin,
+  postLoginLayer,
+  getSocioById,
+  losBenditosCookis,
+  resolviendo,
 } from "../controllers/products.controller";
 
 const router = Router();
@@ -30,6 +33,12 @@ router.put("/products/:id", editarLogById);
 
 // router.post("/visualk", (req, res) => res.send("visual!!!"));
 
-router.post("/visualk", postLogin);
+router.post("/visualk", postLoginLayer);
+
+router.get("/visualk/cookies", losBenditosCookis);
+
+router.get("/visualk/resol", resolviendo);
+
+router.get("/visualk/:id", getSocioById);
 
 export default router;
