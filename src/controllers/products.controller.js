@@ -4,7 +4,15 @@ let sessionCookies = "";
 let arrheader = [];
 const db = "VISUALK_CL";
 
-export const getProducts = async (req, res) => {
+const logRegistro = (status, body, type) => {
+  console.log(typeof status);
+  console.log(typeof body);
+  console.log(typeof type);
+  const fecha = new Date().toLocaleString("es-ES");
+  console.log(typeof fecha);
+};
+
+export const getAllSql = async (req, res) => {
   try {
     const pool = await getConnection();
     const resultado = await pool.request().query(queries.getAllLog);
@@ -186,6 +194,9 @@ export const getControllerLayerDashb = async (req, res) => {
       //   console.log("3", JSON.stringify(response.body));
       res.json(response.body);
     }
+
+    logRegistro(response.statusCode, body, "GET");
+    // console.log("body?.", body);
   });
 };
 

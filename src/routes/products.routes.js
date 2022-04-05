@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import {
-  getProducts,
+  getAllSql,
   createNewProduct,
   getLogById,
   deleteLogById,
@@ -20,17 +20,17 @@ const router = Router();
 
 // router.get("/products", (req, res) => res.send("products!!!"));
 
-router.get("/products", getProducts);
+router.get("/sql", getAllSql);
 
-router.post("/products", createNewProduct);
+router.post("/sql", createNewProduct);
 
-router.get("/products/count", getLogCountController);
+router.get("/sql/count", getLogCountController);
 
-router.get("/products/:id", getLogById);
+router.get("/sql/:id", getLogById);
 
-router.delete("/products/:id", deleteLogById);
+router.delete("/sql/:id", deleteLogById);
 
-router.put("/products/:id", editarLogById);
+router.put("/sql/:id", editarLogById);
 
 ///////////////////////////////////////////////////////
 

@@ -1,5 +1,5 @@
 export const queries = {
-  getAllLog: "SELECT * FROM usuariolog",
+  getAllLog: "SELECT * FROM logVisualk",
   addNewLog:
     "INSERT INTO usuariolog (nombre, peticion, fecha) VALUES (@nombre, @peticion, @fecha)",
   getLogById: "SELECT * FROM usuariolog WHERE Id = @Id",
