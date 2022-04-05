@@ -1,23 +1,47 @@
-@api = http://localhost:4000/visualk
+@api = http://localhost:5000
 
 ### Ejercicio 1
 ### End Points API
 
 ### Peticion del Login
-POST {{api}}
+POST {{api}}/visualk-login
+Content-Type: application/json
 
+{
+    "CompanyDB":"VISUALK_CL",
+    "UserName":"postulante3",
+    "Password":"123qwe"
+}
 
 
 ### Get Socio su ID
+GET {{api}}/visualk-id/CS003
 
-GET {{api}}/1
+### Get Tus socios con la AdditionalID
+get {{api}}/visualk-dashboard/postulante3
 
+### POST Creacion de un Socio
+POST {{api}}/visualk-creacion
+Content-Type: application/json
 
+{
+    "CardCode":"CS089",
+    "CardName":"adriana",
+    "CardType":"C",
+    "FederalTaxID":"1-3",
+    "AdditionalID":"postulante3"
+}
 
-###
+### GET Buscar Socio con parametros
+GET {{api}}/visualk-buscador/CardName,adriana
 
-GET {{api}}/cookies
+### Editar un Socio
+PATCH {{api}}/visualk-edicion/CS089
+Content-Type: application/json
 
-###
+{
+    "CardName":"adriana(actualizadodesdeback)"
+}
 
-get {{api}}/resol
+### Eliminar un Socio
+DELETE {{api}}/visualk-Eliminar/CS006

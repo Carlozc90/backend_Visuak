@@ -1,4 +1,3 @@
-import axios from "axios";
 import { getConnection, sql, queries } from "../database";
 
 let sessionCookies = "";
@@ -87,21 +86,21 @@ export const editarLogById = async (req, res) => {
   res.json({ nombre, peticion, fecha });
 };
 
-export const postLoginLayer = async (req, res) => {
-  const request = require("request");
+/////////////////////////////////////////////////////////////////
+// Service Layer
+
+// post Login
+export const loginControllerLayer = async (req, res) => {
+  var request = require("request").defaults({ jar: true });
+  // var request = request.defaults({ jar: true });
   const url = "https://datacenter.visualkgroup.com:58346/b1s/v1/Login";
-  const body = {
-    CompanyDB: "VISUALK_CL",
-    UserName: "postulante3",
-    Password: "123qwe",
-  };
   const postheaders = {
     "Content-Type": "application/json",
   };
   const options = {
     url: url,
     method: "post",
-    json: body,
+    json: req.body,
     postheaders: postheaders,
     strictSSL: false,
     secureProtocol: "TLSv1_method",
@@ -113,92 +112,200 @@ export const postLoginLayer = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
       console.log("3", JSON.stringify(response.body));
-      // console.log("4", response.rawHeaders);
-      res.json(response.body);
 
       sessionCookies = response.body.SessionId;
-      arrheader = response.rawHeaders[15].split(";");
-      arrheader = arrheader[0].split("=");
+
+      if (response.statusCode === 200) {
+        arrheader = response.rawHeaders[15].split(";");
+        arrheader = arrheader[0].split("=");
+      }
+
+      if (arrheader[0] !== "close") {
+        res.cookie("ROUTEID", arrheader[1]);
+      }
+
+      res.cookie("B1SESSION", sessionCookies, { httpOnly: true });
+      res.cookie("CompanyDB", "VISUALK_CL", { httpOnly: true });
+
+      res.json(response.body);
     }
   });
 };
 
-// export const getSocioById = async (req, res) => {
-//   try {
-//     const data = await axios(
-//       `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('CS001')`,
-//       {
-//         withCredentials: true,
-//       }
-//     )
-//       .catch(function (error) {
-//         // respuesta del servidor error
-//         if (error.response) {
-//           console.log(error.response.data);
-//         }
-//       })
-//       .then((res) => {
-//         console.log(res);
-//       })
-//       .catch((error) => console.error("Error:", error))
-//       .then(function (response) {
-//         console.log(response);
-//       });
-
-//     console.log(data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-export const getSocioById = async (req, res) => {
-  res.cookie(`B1SESSION`, sessionCookies);
-  res.cookie(`CompanyDB`, db);
-  res.cookie(`ROUTEID`, arrheader[1]);
-
-  const { id } = req.params;
-  const request = require("request");
-  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('CS003')`;
+// get obtener por su id
+export const getIdControllerLayer = async (req, res) => {
+  const id = req.params.id;
+  var request = require("request").defaults({ jar: true });
+  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('${id}')`;
   const body = {};
   const postheaders = {
     "Content-Type": "application/json",
   };
   const options = {
     url: url,
-    method: "get",
+    method: "GET",
     json: body,
     postheaders: postheaders,
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-  // request.cookie("key1=value1");
   request.get(options, (error, response, body) => {
     if (error) {
       console.log("1", error);
     } else {
-      // console.log("respuestacookis", req.cookies);
       console.log("2", response.statusCode);
-      console.log("3", JSON.stringify(response.body));
+      //   console.log("3", JSON.stringify(response.body));
       res.json(response.body);
     }
   });
 };
 
-export const losBenditosCookis = async (req, res) => {
-  // res.clearCookie();
-  res.cookie(`B1SESSION`, sessionCookies);
-  res.cookie(`CompanyDB`, db);
-  res.cookie(`ROUTEID`, arrheader[1]);
+// get obtener por su AdditionalId
+export const getControllerLayerDashb = async (req, res) => {
+  const id = req.params.id;
 
-  // res.send("Cookie have been saved successfully");
-
-  console.log("antes", req.cookies);
-  console.log("despues", res.cookies);
-  res.send(req.cookies);
+  var request = require("request").defaults({ jar: true });
+  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners?$select=CardCode,CardName,CardType,FederalTaxID,AdditionalID&$filter=startswith(AdditionalID, '${id}')`;
+  const body = {};
+  const postheaders = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    url: url,
+    method: "GET",
+    json: body,
+    postheaders: postheaders,
+    strictSSL: false,
+    secureProtocol: "TLSv1_method",
+  };
+  request.get(options, (error, response, body) => {
+    if (error) {
+      console.log("1", error);
+    } else {
+      console.log("2", response.statusCode);
+      //   console.log("3", JSON.stringify(response.body));
+      res.json(response.body);
+    }
+  });
 };
 
-export const resolviendo = async (req, res) => {
-  console.log("nodo-> ", arrheader[1]);
-  console.log("session-> ", sessionCookies);
-  console.log("ladb-> ", db);
+// post Creacion del socio
+export const postControllerLayerCreacion = async (req, res) => {
+  var request = require("request").defaults({ jar: true });
+  const url =
+    "https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners";
+  const postheaders = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    url: url,
+    method: "post",
+    json: req.body,
+    postheaders: postheaders,
+    strictSSL: false,
+    secureProtocol: "TLSv1_method",
+  };
+
+  request.post(options, (error, response) => {
+    if (error) {
+      console.log("1", error);
+    } else {
+      console.log("2", response.statusCode);
+      res.json(response.body);
+    }
+  });
+};
+
+// get Buscador con los parametros
+export const getControllerLayerBuscador = async (req, res) => {
+  const id = req.params.id;
+  console.log("el id: ", id);
+  const sep = id.split(",");
+  const parametro = sep[0];
+  const contenido = sep[1];
+
+  // console.log(
+  //   `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners?$select=CardCode,CardName,CardType,FederalTaxID,AdditionalID&$filter=startswith(${parametro}, '${contenido}')`
+  // );
+  var request = require("request").defaults({ jar: true });
+  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners?$select=CardCode,CardName,CardType,FederalTaxID,AdditionalID&$filter=startswith(${parametro}, '${contenido}')`;
+  const body = {};
+  const postheaders = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    url: url,
+    method: "GET",
+    json: body,
+    postheaders: postheaders,
+    strictSSL: false,
+    secureProtocol: "TLSv1_method",
+  };
+  request.get(options, (error, response) => {
+    if (error) {
+      console.log("1", error);
+    } else {
+      console.log("2", response.statusCode);
+      //   console.log("3", JSON.stringify(response.body));
+      res.json(response.body);
+    }
+  });
+};
+
+// patch Edicion del Socio
+export const patchControllerLayerEdicion = async (req, res) => {
+  const id = req.params.id;
+
+  var request = require("request").defaults({ jar: true });
+  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('${id}')`;
+  const postheaders = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    url: url,
+    method: "patch",
+    json: req.body,
+    postheaders: postheaders,
+    strictSSL: false,
+    secureProtocol: "TLSv1_method",
+  };
+
+  request.patch(options, (error, response) => {
+    if (error) {
+      console.log("1", error);
+    } else {
+      console.log("2", response.statusCode);
+
+      res.json(response.statusCode);
+    }
+  });
+};
+
+// Eliminacion de un Socio
+export const deleteControllerLayerSocio = async (req, res) => {
+  const id = req.params.id;
+
+  var request = require("request").defaults({ jar: true });
+  const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('${id}')`;
+  const postheaders = {
+    "Content-Type": "application/json",
+  };
+  const options = {
+    url: url,
+    method: "delete",
+    // json: req.body,
+    postheaders: postheaders,
+    strictSSL: false,
+    secureProtocol: "TLSv1_method",
+  };
+
+  request.delete(options, (error, response) => {
+    if (error) {
+      console.log("1", error);
+    } else {
+      console.log("2", response.statusCode);
+
+      res.json(response.statusCode);
+    }
+  });
 };
