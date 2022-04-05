@@ -2,11 +2,7 @@ import { Router } from "express";
 
 import {
   getAllSql,
-  createNewProduct,
-  getLogById,
-  deleteLogById,
-  getLogCountController,
-  editarLogById,
+  postNewSql,
   loginControllerLayer,
   getIdControllerLayer,
   getControllerLayerDashb,
@@ -22,15 +18,7 @@ const router = Router();
 
 router.get("/sql", getAllSql);
 
-router.post("/sql", createNewProduct);
-
-router.get("/sql/count", getLogCountController);
-
-router.get("/sql/:id", getLogById);
-
-router.delete("/sql/:id", deleteLogById);
-
-router.put("/sql/:id", editarLogById);
+router.post("/sql", postNewSql);
 
 ///////////////////////////////////////////////////////
 
