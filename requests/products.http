@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 @api = http://localhost:3500/products
+=======
+@api = http://localhost:4000/products
+
+>>>>>>> visualk
 
 ### obtener todo
 GET {{api}}
