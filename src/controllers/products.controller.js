@@ -67,35 +67,30 @@ export const loginControllerLayer = async (req, res) => {
   };
   const options = {
     url: url,
-    method: "post",
+    method: "POST",
     json: req.body,
     postheaders: postheaders,
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
 
-  request.post(options, (error, response, body) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
-      console.log("3", JSON.stringify(response.body));
-
+  request(options, (error, response) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       sessionCookies = response.body.SessionId;
 
-      if (response.statusCode === 200) {
-        arrheader = response.rawHeaders[15].split(";");
-        arrheader = arrheader[0].split("=");
-      }
+      arrheader = response.rawHeaders[15].split(";");
+      arrheader = arrheader[0].split("=");
 
       if (arrheader[0] !== "close") {
         res.cookie("ROUTEID", arrheader[1]);
       }
-
       res.cookie("B1SESSION", sessionCookies, { httpOnly: true });
       res.cookie("CompanyDB", "VISUALK_CL", { httpOnly: true });
       res.json(response);
+      return;
     }
+    console.log("error Login", error);
+    res.json(response);
   });
 };
 
@@ -116,14 +111,12 @@ export const getIdControllerLayer = async (req, res) => {
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-  request.get(options, (error, response, body) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
-      //   console.log("3", JSON.stringify(response.body));
+  request(options, (error, response) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
+      return;
     }
+    console.log("error id", error);
   });
 };
 
@@ -145,17 +138,14 @@ export const getControllerLayerDashb = async (req, res) => {
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-  request.get(options, (error, response, body) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
-      //   console.log("3", JSON.stringify(response.body));
+  request(options, (error, response, body) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
+    } else {
+      console.log("error dash", error);
     }
 
     logRegistro(response.statusCode, body, "GET");
-    // console.log("body?.", body);
   });
 };
 
@@ -169,34 +159,28 @@ export const postControllerLayerCreacion = async (req, res) => {
   };
   const options = {
     url: url,
-    method: "post",
+    method: "POST",
     json: req.body,
     postheaders: postheaders,
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-
-  request.post(options, (error, response) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
+  request(options, (error, response) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
+      return;
     }
+    console.log("error Creacion", error);
   });
 };
 
 // get Buscador con los parametros
 export const getControllerLayerBuscador = async (req, res) => {
   const id = req.params.id;
-  console.log("el id: ", id);
   const sep = id.split(",");
   const parametro = sep[0];
   const contenido = sep[1];
 
-  // console.log(
-  //   `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners?$select=CardCode,CardName,CardType,FederalTaxID,AdditionalID&$filter=startswith(${parametro}, '${contenido}')`
-  // );
   var request = require("request").defaults({ jar: true });
   const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners?$select=CardCode,CardName,CardType,FederalTaxID,AdditionalID&$filter=startswith(${parametro}, '${contenido}')`;
   const body = {};
@@ -211,21 +195,18 @@ export const getControllerLayerBuscador = async (req, res) => {
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-  request.get(options, (error, response) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
-      //   console.log("3", JSON.stringify(response.body));
+  request(options, (error, response) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
+      return;
     }
+    console.log("error parametros", error);
   });
 };
 
 // patch Edicion del Socio
 export const patchControllerLayerEdicion = async (req, res) => {
   const id = req.params.id;
-
   var request = require("request").defaults({ jar: true });
   const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('${id}')`;
   const postheaders = {
@@ -233,28 +214,24 @@ export const patchControllerLayerEdicion = async (req, res) => {
   };
   const options = {
     url: url,
-    method: "patch",
+    method: "PATCH",
     json: req.body,
     postheaders: postheaders,
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-
-  request.patch(options, (error, response) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
-
+  request(options, (error, response) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
+      return;
     }
+    console.log("error edicion", error);
   });
 };
 
 // Eliminacion de un Socio
 export const deleteControllerLayerSocio = async (req, res) => {
   const id = req.params.id;
-
   var request = require("request").defaults({ jar: true });
   const url = `https://datacenter.visualkgroup.com:58346/b1s/v1/BusinessPartners('${id}')`;
   const postheaders = {
@@ -262,20 +239,16 @@ export const deleteControllerLayerSocio = async (req, res) => {
   };
   const options = {
     url: url,
-    method: "delete",
+    method: "DELETE",
     // json: req.body,
     postheaders: postheaders,
     strictSSL: false,
     secureProtocol: "TLSv1_method",
   };
-
-  request.delete(options, (error, response) => {
-    if (error) {
-      console.log("1", error);
-    } else {
-      console.log("2", response.statusCode);
-
+  request(options, (error, response) => {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
     }
+    console.log("error delete", error);
   });
 };
