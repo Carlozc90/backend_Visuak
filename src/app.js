@@ -13,7 +13,7 @@ app.use(cors());
 app.use(cookieParser());
 
 // settings
-app.set("port", config.port || 4000);
+app.set("port", config.port);
 
 // middlewares
 app.use(express.json());
