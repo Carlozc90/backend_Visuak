@@ -12,5 +12,7 @@ Content-Type: application/json
     "status":200,
     "type":"DELETE",
     "body":"{el body akjsdhaksjdhkajshdkjsa 2}",
-    "fecha":"10-01"
+    "fecha":"10-01",
+    "usuario":"kien?",
+    "funcion":"getTest()"
 }

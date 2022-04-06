@@ -31,10 +31,17 @@ export const getAllSql = async (req, res) => {
 };
 
 export const postNewSql = async (req, res) => {
-  const { status, type, body, fecha } = req.body;
+  const { status, type, body, fecha, usuario, funcion } = req.body;
   // console.log("respuesta_>", req.body);
 
-  if (status == null || type == null || body == null || fecha == null) {
+  if (
+    status == null ||
+    type == null ||
+    body == null ||
+    fecha == null ||
+    usuario == null ||
+    funcion == null
+  ) {
     return res.status(400).json({ msg: "Bad Request. LLena todos los campos" });
   }
 
@@ -47,9 +54,11 @@ export const postNewSql = async (req, res) => {
       .input("type", sql.VarChar, type)
       .input("body", sql.VarChar, body)
       .input("fecha", sql.VarChar, fecha)
+      .input("usuario", sql.VarChar, usuario)
+      .input("funcion", sql.VarChar, funcion)
       .query(queries.addNewLog);
 
-    res.json({ status, type, body, fecha });
+    res.json({ status, type, body, fecha, usuario, funcion });
   } catch (error) {
     res.status(500);
     res.send(error.message);
