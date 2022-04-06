@@ -1,8 +1,9 @@
+import path from "path";
+import { textfile } from "../../log/file_system";
 import { getConnection, sql, queries } from "../database";
 
 let sessionCookies = "";
 let arrheader = [];
-const db = "VISUALK_CL";
 
 const logRegistro = (status, body, type) => {
   console.log(typeof status);
@@ -12,11 +13,17 @@ const logRegistro = (status, body, type) => {
   console.log(typeof fecha);
 };
 
+export const getTextFile = async (req, res) => {
+  const url = path.join(__dirname, "../../log/TextoLogError.txt");
+  res.sendFile(url);
+};
+
 export const getAllSql = async (req, res) => {
   try {
     const pool = await getConnection();
     const resultado = await pool.request().query(queries.getAllLog);
     res.json(resultado.recordset);
+    textfile(resultado.recordset);
   } catch (error) {
     res.status(500);
     res.send(error.message);
@@ -87,17 +94,7 @@ export const loginControllerLayer = async (req, res) => {
 
       res.cookie("B1SESSION", sessionCookies, { httpOnly: true });
       res.cookie("CompanyDB", "VISUALK_CL", { httpOnly: true });
-
-      // const req = {
-      //   body: {
-      //     status: response.statusCode,
-      //     type: response.request.method,
-      //     body: JSON.stringify(response.body),
-      //     fecha: new Date().toLocaleString("es-ES"),
-      //   },
-      // };
-      // postNewSql(req);
-      res.json(response.body);
+      res.json(response);
     }
   });
 };
@@ -125,7 +122,7 @@ export const getIdControllerLayer = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
       //   console.log("3", JSON.stringify(response.body));
-      res.json(response.body);
+      res.json(response);
     }
   });
 };
@@ -154,7 +151,7 @@ export const getControllerLayerDashb = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
       //   console.log("3", JSON.stringify(response.body));
-      res.json(response.body);
+      res.json(response);
     }
 
     logRegistro(response.statusCode, body, "GET");
@@ -184,7 +181,7 @@ export const postControllerLayerCreacion = async (req, res) => {
       console.log("1", error);
     } else {
       console.log("2", response.statusCode);
-      res.json(response.body);
+      res.json(response);
     }
   });
 };
@@ -220,7 +217,7 @@ export const getControllerLayerBuscador = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
       //   console.log("3", JSON.stringify(response.body));
-      res.json(response.body);
+      res.json(response);
     }
   });
 };
@@ -249,7 +246,7 @@ export const patchControllerLayerEdicion = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
 
-      res.json(response.statusCode);
+      res.json(response);
     }
   });
 };
@@ -278,7 +275,7 @@ export const deleteControllerLayerSocio = async (req, res) => {
     } else {
       console.log("2", response.statusCode);
 
-      res.json(response.statusCode);
+      res.json(response);
     }
   });
 };

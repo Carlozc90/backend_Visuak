@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  getTextFile,
   getAllSql,
   postNewSql,
   loginControllerLayer,
@@ -14,7 +15,9 @@ import {
 
 const router = Router();
 
-// router.get("/products", (req, res) => res.send("products!!!"));
+router.get("/errortxt", getTextFile);
+
+////////////////////////////////////////////////////////
 
 router.get("/sql", getAllSql);
 

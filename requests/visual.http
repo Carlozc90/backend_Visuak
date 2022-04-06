@@ -45,3 +45,8 @@ Content-Type: application/json
 
 ### Eliminar un Socio
 DELETE {{api}}/visualk-Eliminar/CS006
+
+
+#### enviar file error.txt
+
+GET {{api}}/errortxt
