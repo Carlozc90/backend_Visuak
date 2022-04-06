@@ -25,6 +25,7 @@ export const getAllSql = async (req, res) => {
 
 export const postNewSql = async (req, res) => {
   const { status, type, body, fecha } = req.body;
+
   if (status == null || type == null || body == null || fecha == null) {
     return res.status(400).json({ msg: "Bad Request. LLena todos los campos" });
   }
@@ -52,8 +53,7 @@ export const postNewSql = async (req, res) => {
 
 // post Login
 export const loginControllerLayer = async (req, res) => {
-  var request = require("request").defaults({ jar: true });
-  // var request = request.defaults({ jar: true });
+  const request = require("request").defaults({ jar: true });
   const url = "https://datacenter.visualkgroup.com:58346/b1s/v1/Login";
   const postheaders = {
     "Content-Type": "application/json",
@@ -88,6 +88,15 @@ export const loginControllerLayer = async (req, res) => {
       res.cookie("B1SESSION", sessionCookies, { httpOnly: true });
       res.cookie("CompanyDB", "VISUALK_CL", { httpOnly: true });
 
+      // const req = {
+      //   body: {
+      //     status: response.statusCode,
+      //     type: response.request.method,
+      //     body: JSON.stringify(response.body),
+      //     fecha: new Date().toLocaleString("es-ES"),
+      //   },
+      // };
+      // postNewSql(req);
       res.json(response.body);
     }
   });
