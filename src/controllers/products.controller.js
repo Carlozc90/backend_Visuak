@@ -32,6 +32,7 @@ export const getAllSql = async (req, res) => {
 
 export const postNewSql = async (req, res) => {
   const { status, type, body, fecha } = req.body;
+  // console.log("respuesta_>", req.body);
 
   if (status == null || type == null || body == null || fecha == null) {
     return res.status(400).json({ msg: "Bad Request. LLena todos los campos" });
@@ -142,6 +143,7 @@ export const getControllerLayerDashb = async (req, res) => {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
     } else {
+      res.json(response);
       console.log("error dash", error);
     }
 
@@ -168,9 +170,10 @@ export const postControllerLayerCreacion = async (req, res) => {
   request(options, (error, response) => {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       res.json(response);
-      return;
+    } else {
+      res.json(response);
+      console.log("error Creacion", error);
     }
-    console.log("error Creacion", error);
   });
 };
 
