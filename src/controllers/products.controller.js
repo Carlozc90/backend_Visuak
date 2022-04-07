@@ -6,11 +6,11 @@ let sessionCookies = "";
 let arrheader = [];
 
 const logRegistro = (status, body, type) => {
-  console.log(typeof status);
-  console.log(typeof body);
-  console.log(typeof type);
+  // console.log(typeof status);
+  // console.log(typeof body);
+  // console.log(typeof type);
   const fecha = new Date().toLocaleString("es-ES");
-  console.log(typeof fecha);
+  // console.log(typeof fecha);
 };
 
 export const getTextFile = async (req, res) => {
